@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Empresas</string>
+    <string name="app_name">EMPRESAS</string>
+    <string name="app_title">BEM VINDO \nAO EMPRESAS</string>
+    <string name="app_subtitle">Lorem ipsum dolor sit amet, contetur adipiscing elit. Nunc accumsan.</string>
+    <string name="password">Senha</string>
+    <string name="email">E-mail</string>
+    <string name="sign_in">ENTRAR</string>
 </resources>
