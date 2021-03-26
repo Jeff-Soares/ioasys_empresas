@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bg">#ebe9d7</color>
     <color name="statusBar">#B5B4A6</color>
+    <color name="statusBarCompany">#B8395D</color>
 
 </resources>
