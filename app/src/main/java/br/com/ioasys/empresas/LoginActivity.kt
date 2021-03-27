@@ -13,7 +13,7 @@ class LoginActivity: AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         findViewById<Button>(R.id.loginSubmit).setOnClickListener{
-            val intent = Intent(this, RecyclerActivity::class.java)
+            val intent = Intent(this, CompanyListActivity::class.java)
             startActivity(intent)
             finish()
         }

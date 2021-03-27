@@ -22,7 +22,7 @@
         <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
-    <style name="Theme.RecyclerCompany" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.CompanyList" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/statusBarCompany</item>
         <item name="android:navigationBarColor">@color/navigationBar</item>
     </style>
