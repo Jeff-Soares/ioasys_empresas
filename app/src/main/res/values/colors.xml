@@ -10,5 +10,6 @@
     <color name="bg">#ebe9d7</color>
     <color name="statusBar">#B5B4A6</color>
     <color name="statusBarCompany">#B8395D</color>
+    <color name="navigationBar">#140c35</color>
 
 </resources>

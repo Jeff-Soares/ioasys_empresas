@@ -11,16 +11,19 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/statusBar</item>
+        <item name="android:navigationBarColor">@color/navigationBar</item>
         <item name="android:windowFullscreen">false</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@color/navigationBar</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
     <style name="Theme.RecyclerCompany" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/statusBarCompany</item>
+        <item name="android:navigationBarColor">@color/navigationBar</item>
     </style>
 </resources>
