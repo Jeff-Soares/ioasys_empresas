@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/beige"
     tools:context=".CompanyDetailFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -13,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_bg"
+        android:theme="@style/Theme.Empresas"
         android:layout_margin="0dp"
         android:tint="@color/white">
 

@@ -6,4 +6,7 @@
     <string name="password">Senha</string>
     <string name="email">E-mail</string>
     <string name="sign_in">ENTRAR</string>
+    <string name="pass_required">A senha é obrigatória</string>
+    <string name="email_required">O E-mail é obrigatório</string>
+    <string name="email_invalid">Email inválido, ex: abc@exemplo.com</string>
 </resources>
