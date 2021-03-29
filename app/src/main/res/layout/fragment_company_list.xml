@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CompanyListActivity">
+    tools:context=".CompanyListFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_company"
@@ -27,7 +27,8 @@
                 android:id="@+id/logo_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/logo_home" />
+                android:src="@drawable/logo_home"
+                android:tint="@color/white"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.Toolbar>
@@ -40,6 +41,6 @@
         android:background="@color/beige"
         android:paddingVertical="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/list_company"/>
+        tools:listitem="@layout/item_company"/>
 
 </RelativeLayout>

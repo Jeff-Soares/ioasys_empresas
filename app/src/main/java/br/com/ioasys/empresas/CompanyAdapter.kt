@@ -1,19 +1,19 @@
 package br.com.ioasys.empresas
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import br.com.ioasys.empresas.databinding.ListCompanyBinding
+import br.com.ioasys.empresas.databinding.ItemCompanyBinding
 import br.com.ioasys.empresas.models.Company
 import com.bumptech.glide.Glide
 
-class CompanyAdapter (private val companies: MutableList<Company>): RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
+class CompanyAdapter (private val callback: (Company) -> Unit): RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
+
+    private var companies: List<Company> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
-        val binding = ListCompanyBinding.inflate(LayoutInflater.from(parent.context), parent,false)
+        val binding = ItemCompanyBinding.inflate(LayoutInflater.from(parent.context), parent,false)
         return CompanyViewHolder(binding)
     }
 
@@ -23,13 +23,14 @@ class CompanyAdapter (private val companies: MutableList<Company>): RecyclerView
 
     override fun getItemCount(): Int = companies.size
 
-    inner class CompanyViewHolder (private val itemBinding: ListCompanyBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    inner class CompanyViewHolder (private val binding: ItemCompanyBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(company: Company) {
-            with (itemBinding){
+            with (binding){
                 companyName.text = company.name
                 companyType.text = company.type
                 companyCountry.text = company.country
+                root.setOnClickListener{callback.invoke(company)}
                 setImage(companyImg, company.pathImage)
             }
         }
@@ -45,4 +46,8 @@ class CompanyAdapter (private val companies: MutableList<Company>): RecyclerView
 
     }
 
+    fun setItems(list: List<Company>){
+        companies = list
+        notifyDataSetChanged()
+    }
 }

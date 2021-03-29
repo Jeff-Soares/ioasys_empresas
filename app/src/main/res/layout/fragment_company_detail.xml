@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CompanyDetailFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/company_toolbar_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_bg"
+        android:layout_margin="0dp"
+        android:tint="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/company_name_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16dp"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/company_img_detail"
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:src="@drawable/company_img"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/company_description_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:fontFamily="@font/source_sans_pro"
+        android:text="@string/company_description"
+        android:textAlignment="textStart"
+        android:textColor="@color/warm_grey"
+        android:textSize="17sp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
