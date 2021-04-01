@@ -11,6 +11,18 @@
         android:name="br.com.ioasys.empresas.CompanyListFragment"
         android:label="activity_company_list"
         tools:layout="@layout/fragment_company_list" >
+        <argument
+            android:name="accessToken"
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="client"
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="uid"
+            app:argType="string"
+            app:nullable="false"/>
         <action
             android:id="@+id/action_companyListFragment_to_companyDetailFragment"
             app:destination="@id/companyDetailFragment" />
@@ -26,10 +38,6 @@
             app:nullable="true" />
         <argument
             android:name="imageUrl"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="type"
             app:argType="string"
             app:nullable="true" />
         <argument

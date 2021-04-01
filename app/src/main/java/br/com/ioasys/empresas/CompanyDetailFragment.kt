@@ -58,7 +58,7 @@ class CompanyDetailFragment : Fragment() {
 
     private fun configureView (){
         companyName.text = args.name
-        companyType.text = args.type
+//        companyType.text = args.type
 //        companyCountry.text = args.country
         setImage(args.imageUrl)
     }

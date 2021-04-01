@@ -28,7 +28,7 @@ class CompanyAdapter (private val callback: (Company) -> Unit): RecyclerView.Ada
         fun bind(company: Company) {
             with (binding){
                 companyName.text = company.name
-                companyType.text = company.type
+                companyType.text = company.description
                 companyCountry.text = company.country
                 root.setOnClickListener{callback.invoke(company)}
                 setImage(companyImg, company.pathImage)

@@ -9,8 +9,14 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import br.com.ioasys.empresas.databinding.ActivityLoginBinding
+import br.com.ioasys.empresas.remote.CompanyService
+import br.com.ioasys.empresas.remote.LoginRequest
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
 
 class LoginActivity: AppCompatActivity() {
@@ -43,15 +49,37 @@ class LoginActivity: AppCompatActivity() {
         submit.setOnClickListener{
             if (!validateEmail()) return@setOnClickListener
             if (!validatePassword()) return@setOnClickListener
-            login()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val response = CompanyService.newInstance().login(LoginRequest(
+                    email = email.text.toString(),
+                    password = password.text.toString()
+                ))
+                handleLogin(response)
+            }
+
         }
 
     }
 
-    private fun login(){
-        val intent = Intent(this, Company::class.java)
-        startActivity(intent)
-        finish()
+    private fun handleLogin(response: Response<Unit>){
+        if (response.isSuccessful) {
+//            Log.i("LOGIN", "Access Token = ${response.headers()["access-token"]}")
+//            Log.i("LOGIN", "Client = ${response.headers()["client"]}")
+//            Log.i("LOGIN", "Uid = ${response.headers()["uid"]}")
+
+            val intent = Intent(this, CompanyActivity::class.java)
+            val mBundle = Bundle()
+            mBundle.putString("accessToken", response.headers()["access-token"])
+            mBundle.putString("client", response.headers()["client"])
+            mBundle.putString("uid", response.headers()["uid"])
+            intent.putExtras(mBundle)
+//            intent.putExtra("accessToken", response.headers()["access-token"])
+//            intent.putExtra("client", response.headers()["client"])
+//            intent.putExtra("uid", response.headers()["uid"])
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun requestFocus(view: View) {
