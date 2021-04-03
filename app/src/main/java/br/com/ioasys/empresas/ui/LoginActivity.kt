@@ -8,15 +8,13 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.ViewModelProvider
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ActivityLoginBinding
-import br.com.ioasys.empresas.remote.CompanyService
-import br.com.ioasys.empresas.remote.LoginRequest
+import br.com.ioasys.empresas.presentation.LoginViewModel
+import br.com.ioasys.empresas.presentation.ViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Response
 
 
@@ -28,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var email: TextInputEditText
     private lateinit var password: TextInputEditText
     private lateinit var submit: AppCompatButton
+    private lateinit var viewModel: LoginViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
         setTheme(R.style.Theme_Empresas)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this, ViewModelFactory()).get(LoginViewModel::class.java)
 
         with(binding) {
             emailInputLayout = loginEmailInputLayout
@@ -51,16 +51,32 @@ class LoginActivity : AppCompatActivity() {
             if (!validateEmail()) return@setOnClickListener
             if (!validatePassword()) return@setOnClickListener
 
-            CoroutineScope(Dispatchers.Main).launch {
-                val response = CompanyService.newInstance().login(LoginRequest(
-                        email = email.text.toString(),
-                        password = password.text.toString()
-                ))
-                handleLogin(response)
-            }
+            viewModel.login(email.text.toString(), password.text.toString())
 
+//            CoroutineScope(Dispatchers.Main).launch {
+//                val response = CompanyService.newInstance().login(LoginRequest(
+//                        email = email.text.toString(),
+//                        password = password.text.toString()
+//                ))
+//                handleLogin(response)
+//            }
         }
+        setObservers()
+    }
 
+    private fun setObservers() {
+        viewModel.headersLiveData.observe(this, { headers ->
+            val mIntent = Intent(this, CompanyActivity::class.java)
+            val mBundle = Bundle()
+
+            mBundle.putString("accessToken", headers["access-token"])
+            mBundle.putString("client", headers["client"])
+            mBundle.putString("uid", headers["uid"])
+            mIntent.putExtras(mBundle)
+
+            startActivity(mIntent)
+            finish()
+        })
     }
 
     private fun handleLogin(response: Response<Unit>) {

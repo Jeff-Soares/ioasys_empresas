@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas.models
+package br.com.ioasys.empresas.data
 
 data class Company(
     val id: Int,

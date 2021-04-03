@@ -1,7 +1,7 @@
 package br.com.ioasys.empresas.remote
 
-import br.com.ioasys.empresas.models.Company
-import br.com.ioasys.empresas.models.CompanyType
+import br.com.ioasys.empresas.data.Company
+import br.com.ioasys.empresas.data.CompanyType
 
 fun CompanyResponse.toModel(): Company{
     return Company(

@@ -1,25 +1,20 @@
 package br.com.ioasys.empresas.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import br.com.ioasys.empresas.R
-import br.com.ioasys.empresas.models.Company
-import br.com.ioasys.empresas.remote.CompanyService
-import br.com.ioasys.empresas.remote.GetCompaniesResponse
-import br.com.ioasys.empresas.remote.toModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Response
+import br.com.ioasys.empresas.data.Company
+import br.com.ioasys.empresas.presentation.CompanyListViewModel
+import br.com.ioasys.empresas.presentation.ViewModelFactory
 
 class CompanyListFragment : Fragment() {
 
@@ -30,6 +25,7 @@ class CompanyListFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var textView: TextView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var viewModel: CompanyListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +44,7 @@ class CompanyListFragment : Fragment() {
         textView = view.findViewById(R.id.empty_recyclerview_text)
         searchView = view.findViewById(R.id.company_search)
 
-//        toolbar.inflateMenu(R.menu.company_menu)
+        viewModel = ViewModelProvider(this, ViewModelFactory()).get(CompanyListViewModel::class.java)
 
         if (compAdapter.isEmpty()) textView.visibility = View.VISIBLE
 
@@ -56,33 +52,12 @@ class CompanyListFragment : Fragment() {
         recyclerView.adapter = compAdapter
 
         configureSearchView(searchView)
-
-//        getCompanies()
+        setObservers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.company_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
-
-//        toolbar.inflateMenu(R.menu.company_menu)
-//
-//        toolbar.setOnMenuItemClickListener {
-//            toolbarImg.visibility = View.GONE
-//            return@setOnMenuItemClickListener false
-//        }
-
-//        toolbarImg.visibility = View.GONE
-
-//        val searchItem: MenuItem = menu.findItem(R.id.company_search)
-//        val searchView: SearchView = searchItem.actionView as SearchView
-//
-//        searchView.setOnSearchClickListener { toolbarImg.visibility = View.GONE }
-//
-//        searchView.setOnCloseListener {
-//            toolbarImg.visibility = View.VISIBLE
-//            return@setOnCloseListener false
-//        }
-
     }
 
     override fun onResume() {
@@ -90,45 +65,28 @@ class CompanyListFragment : Fragment() {
         if (!searchView.isIconified) toolbarImg.visibility = View.GONE
     }
 
-    private fun getCompanies(query: String) {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val response = CompanyService.newInstance().getEnterprises(
-//                accessToken = args.accessToken,
-//                client = args.client,
-//                uid = args.uid
-//            )
-//            handleResponse(response)
-//        }
-        CoroutineScope(Dispatchers.Main).launch {
-            val response = CompanyService.newInstance().getEnterprisesByName(
-                accessToken = args.accessToken,
-                client = args.client,
-                uid = args.uid,
-                name = query
-            )
-            handleResponse(response)
-        }
-    }
-
-    private fun handleResponse(response: Response<GetCompaniesResponse>) {
-        if (response.isSuccessful) {
-            val result = response.body()?.companies?.map { it.toModel() } ?: listOf()
-            if (!result.isNullOrEmpty()) {
+    private fun setObservers() {
+        viewModel.companiesLiveData.observe(viewLifecycleOwner, { list ->
+            if (!list.isNullOrEmpty()) {
                 textView.visibility = View.GONE
-                compAdapter.setItems(result)
+                compAdapter.setItems(list)
             } else {
                 textView.text = getString(R.string.no_results)
                 textView.visibility = View.VISIBLE
                 compAdapter.setItems(listOf())
             }
-        }
+        })
     }
 
     private fun configureSearchView(sv: SearchView) {
         sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                getCompanies(sv.query.toString())
-                Log.i("QueryText", sv.query.toString())
+                viewModel.getCompanies(
+                    accessToken = args.accessToken,
+                    client = args.client,
+                    uid = args.uid,
+                    query = sv.query.toString()
+                )
                 return false
             }
 
