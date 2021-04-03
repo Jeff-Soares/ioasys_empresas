@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas
+package br.com.ioasys.empresas.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

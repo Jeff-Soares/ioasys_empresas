@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CompanyListFragment">
+    tools:context=".ui.CompanyListFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_company"
@@ -16,31 +16,56 @@
         android:layout_margin="0dp"
         app:contentInsetStart="0dp" >
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_margin="0dp"
             android:padding="0dp">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/logo_toolbar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="29dp"
                 android:src="@drawable/logo_home"
-                android:tint="@color/white"/>
+                android:tint="@color/white"
+                android:layout_centerInParent="true"/>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/company_search"
+                app:iconifiedByDefault="true"
+                app:searchIcon="@drawable/ic_search_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="10000dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:queryHint="@string/search"
+                android:theme="@style/Theme.Empresas.SearchView"/>
+
+        </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_company"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_company"
+        tools:listitem="@layout/item_company"
+        android:layout_below="@id/toolbar_company"
         android:background="@color/beige"
         android:paddingVertical="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_company"/>
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/empty_recyclerview_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_company"
+        android:text="@string/click_to_search"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif"
+        android:textAlignment="center"
+        android:visibility="gone"/>
 
 </RelativeLayout>

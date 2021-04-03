@@ -7,9 +7,11 @@ fun CompanyResponse.toModel(): Company{
     return Company(
         id = id,
         name = enterpriseName,
-        pathImage = photo?: "",
-        description = description,
+        pathImage = photo,
+        city = city,
         country = country,
+        description = description,
+        sharePrice = sharePrice,
         type = enterpriseType.toModel()
     )
 }

@@ -9,4 +9,8 @@
     <string name="pass_required">A senha é obrigatória</string>
     <string name="email_required">O E-mail é obrigatório</string>
     <string name="email_invalid">Email inválido, ex: abc@exemplo.com</string>
+    <string name="invalid_credentials">Credenciais informadas são inválidas, tente novamente.</string>
+    <string name="search">Pesquisar</string>
+    <string name="click_to_search">Clique na busca para iniciar.</string>
+    <string name="no_results">Nenhuma empresa foi encontrada para a busca realizada.</string>
 </resources>

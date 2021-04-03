@@ -19,11 +19,17 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
+        def api_version = "api/v1/"
+
         debug {
-            buildConfigField "String", "BASE_URL", '"https://empresas.ioasys.com.br/api/v1/"'
+            buildConfigField "String", "BASE_URL", "\"https://empresas.ioasys.com.br\""
+            buildConfigField "String", "BASE_URL_API", "\"https://empresas.ioasys.com" +
+                    ".br/$api_version\""
         }
         release {
-            buildConfigField "String", "BASE_URL", '"https://empresas.ioasys.com.br/api/v1/"'
+            buildConfigField "String", "BASE_URL", "\"https://empresas.ioasys.com.br\""
+            buildConfigField "String", "BASE_URL_API", "\"https://empresas.ioasys.com" +
+                    ".br/$api_version\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

@@ -16,10 +16,16 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.Empresas.SearchView" parent="@style/Theme.Empresas">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:strokeWidth">5</item>
+    </style>
+
     <style name="Theme.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@color/navigationBar</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@drawable/splash_bg</item>
+<!--        <item name="android:windowBackground">@drawable/splash_bg</item>-->
     </style>
 
     <style name="Theme.CompanyList" parent="Theme.MaterialComponents.DayNight.NoActionBar">

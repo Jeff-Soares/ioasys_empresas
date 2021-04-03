@@ -1,9 +1,11 @@
-package br.com.ioasys.empresas
+package br.com.ioasys.empresas.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import br.com.ioasys.empresas.BuildConfig
+import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ItemCompanyBinding
 import br.com.ioasys.empresas.models.Company
 import com.bumptech.glide.Glide
@@ -28,16 +30,16 @@ class CompanyAdapter (private val callback: (Company) -> Unit): RecyclerView.Ada
         fun bind(company: Company) {
             with (binding){
                 companyName.text = company.name
-                companyType.text = company.description
+                companyType.text = company.type.typeName
                 companyCountry.text = company.country
-                root.setOnClickListener{callback.invoke(company)}
-                setImage(companyImg, company.pathImage)
+                if (!company.pathImage.isNullOrEmpty()) setImage(companyImg, company.pathImage)
+                root.setOnClickListener{ callback.invoke(company) }
             }
         }
 
-        private fun setImage(view: ImageView, url: String){
+        private fun setImage(view: ImageView, url: String?){
             Glide.with(itemView.context)
-                .load(url)
+                .load(BuildConfig.BASE_URL + url)
                 .centerCrop()
                 .placeholder(R.drawable.company_img)
                 .dontAnimate()
@@ -49,5 +51,10 @@ class CompanyAdapter (private val callback: (Company) -> Unit): RecyclerView.Ada
     fun setItems(list: List<Company>){
         companies = list
         notifyDataSetChanged()
+    }
+
+    fun isEmpty(): Boolean{
+        if (companies.isEmpty()) return true
+        return false
     }
 }

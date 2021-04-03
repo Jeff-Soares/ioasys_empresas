@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/companyListFragment"
-        android:name="br.com.ioasys.empresas.CompanyListFragment"
+        android:name="br.com.ioasys.empresas.ui.CompanyListFragment"
         android:label="activity_company_list"
         tools:layout="@layout/fragment_company_list" >
         <argument
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/companyDetailFragment"
-        android:name="br.com.ioasys.empresas.CompanyDetailFragment"
+        android:name="br.com.ioasys.empresas.ui.CompanyDetailFragment"
         android:label="fragment_company_detail"
         tools:layout="@layout/fragment_company_detail" >
         <argument
@@ -41,7 +41,7 @@
             app:argType="string"
             app:nullable="true" />
         <argument
-            android:name="country"
+            android:name="description"
             app:argType="string"
             app:nullable="true" />
     </fragment>

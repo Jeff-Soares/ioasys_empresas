@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/beige"
-    tools:context=".CompanyDetailFragment">
+    tools:context=".ui.CompanyDetailFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/company_toolbar_detail"
@@ -43,6 +43,7 @@
         android:text="@string/company_description"
         android:textAlignment="textStart"
         android:textColor="@color/warm_grey"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:scrollbars="vertical"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
