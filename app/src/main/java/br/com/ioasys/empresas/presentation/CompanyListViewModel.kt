@@ -3,7 +3,7 @@ package br.com.ioasys.empresas.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import br.com.ioasys.empresas.data.Company
+import br.com.ioasys.empresas.presentation.data.Company
 import br.com.ioasys.empresas.remote.CompanyService
 import br.com.ioasys.empresas.remote.GetCompaniesResponse
 import br.com.ioasys.empresas.remote.toModel

@@ -12,13 +12,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import br.com.ioasys.empresas.R
-import br.com.ioasys.empresas.data.Company
+import br.com.ioasys.empresas.presentation.data.Company
 import br.com.ioasys.empresas.presentation.CompanyListViewModel
 import br.com.ioasys.empresas.presentation.ViewModelFactory
 
 class CompanyListFragment : Fragment() {
 
-    private val compAdapter by lazy { CompanyAdapter(::clickItem) }
+    private val compAdapter by lazy { CompanyListAdapter(::clickItem) }
     private val args: CompanyListFragmentArgs by navArgs()
     private lateinit var toolbar: Toolbar
     private lateinit var toolbarImg: ImageView

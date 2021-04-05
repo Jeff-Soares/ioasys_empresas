@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.ioasys.empresas.BuildConfig
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ItemCompanyBinding
-import br.com.ioasys.empresas.data.Company
+import br.com.ioasys.empresas.presentation.data.Company
 import com.bumptech.glide.Glide
 
-class CompanyAdapter (private val callback: (Company) -> Unit): RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
+class CompanyListAdapter (private val callback: (Company) -> Unit): RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder>() {
 
     private var companies: List<Company> = emptyList()
 

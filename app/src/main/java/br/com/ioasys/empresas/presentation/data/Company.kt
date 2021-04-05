@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas.data
+package br.com.ioasys.empresas.presentation.data
 
 data class Company(
     val id: Int,
