@@ -2,52 +2,54 @@ package br.com.ioasys.empresas.presentation
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import br.com.ioasys.empresas.R
-import br.com.ioasys.empresas.presentation.data.LoginFields
-import br.com.ioasys.empresas.remote.CompanyService
-import br.com.ioasys.empresas.remote.LoginRequest
+import androidx.lifecycle.viewModelScope
+import br.com.ioasys.empresas.data.Repository
+import br.com.ioasys.empresas.presentation.model.LoginFields
+import br.com.ioasys.empresas.data.remote.ResultWrapper
+import br.com.ioasys.empresas.data.remote.ResultWrapper.Success
+import br.com.ioasys.empresas.data.remote.ResultWrapper.Failure
+import br.com.ioasys.empresas.util.viewState
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Headers
-import retrofit2.Response
 
 class LoginViewModel(
-    private val service: CompanyService
+    private val repository: Repository
 ) : ViewModel() {
-    private val _headersLiveData = MutableLiveData<Headers>()
-    val headersLiveData: LiveData<Headers> = _headersLiveData
+    private val _loginStateLiveData by viewState<Unit>()
+    val loginStateLiveData: LiveData<ViewState<Unit>> = _loginStateLiveData
     val login: LoginFields = LoginFields()
 
     fun login() {
         if (login.validateEmail() && login.validatePassword()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                val response = service.login(
-                    LoginRequest(
-                        email = login.email,
-                        password = login.password
-                    )
-                )
-                handleLogin(response)
+            _loginStateLiveData.value = ViewState.loading(true)
+            viewModelScope.launch(Dispatchers.Main) {
+                handleLogin(repository.login(login.email, login.password))
             }
         }
     }
 
-    private fun handleLogin(response: Response<Unit>) {
-        if (response.isSuccessful) {
-            _headersLiveData.value = response.headers()
-        } else {
-            login.validCredentials(false)
+    private fun handleLogin(response: ResultWrapper<Headers?>) {
+        when (response) {
+            is Success -> onLoginSuccess(response.data)
+            is Failure -> onLoginError()
         }
+        _loginStateLiveData.value = ViewState.loading(false)
+    }
+
+    private fun onLoginSuccess(headers: Headers?) {
+        headers?.let { _loginStateLiveData.value = ViewState.success(Unit) }
+    }
+
+    private fun onLoginError() {
+        _loginStateLiveData.value = ViewState.error(Throwable("Login Failed"))
+        login.setInvalidCredentialsError()
     }
 
     fun getPasswordOnFocusChangeListener(): TextWatcher {
@@ -55,8 +57,7 @@ class LoginViewModel(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                login.emailError.set(null)
-                login.passwordError.set(null)
+                login.resetErrors()
             }
         }
     }
@@ -77,6 +78,6 @@ fun onTextChange(view: TextInputEditText, watcher: TextWatcher) {
 
 @BindingAdapter("errorVisibility")
 fun setErrorVisibility(view: TextInputLayout, observable: ObservableField<Int?>) {
-    val visibility = observable.get() ?: return
-    view.getChildAt(1)?.apply { this.visibility = visibility }
+    val visibilityState = observable.get() ?: return
+    view.getChildAt(1)?.let { it.visibility = visibilityState }
 }

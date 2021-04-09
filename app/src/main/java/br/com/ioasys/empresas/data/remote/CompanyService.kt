@@ -1,6 +1,8 @@
-package br.com.ioasys.empresas.remote
+package br.com.ioasys.empresas.data.remote
 
 import br.com.ioasys.empresas.BuildConfig
+import br.com.ioasys.empresas.data.model.GetCompaniesResponse
+import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -14,7 +16,7 @@ interface CompanyService {
     @POST("users/auth/sign_in")
     suspend fun login(
         @Body loginRequest: LoginRequest
-    ): Response<Unit>
+    ): Response<Headers>
 
     @GET("enterprises")
     suspend fun getEnterprises(
@@ -25,9 +27,7 @@ interface CompanyService {
 
     @GET("enterprises")
     suspend fun getEnterprisesByName(
-        @Header("access-token") accessToken: String,
-        @Header("client") client: String,
-        @Header("uid") uid: String,
+        @HeaderMap headers: Map<String,String>,
         @Query("name") name: String
     ): Response<GetCompaniesResponse>
 

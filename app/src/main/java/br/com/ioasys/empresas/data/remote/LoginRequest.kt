@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas.remote
+package br.com.ioasys.empresas.data.remote
 
 import com.google.gson.annotations.SerializedName
 

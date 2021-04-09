@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas.presentation.data
+package br.com.ioasys.empresas.presentation.model
 
 import android.view.View
 import androidx.databinding.BaseObservable
@@ -40,17 +40,13 @@ data class LoginFields(
         return true
     }
 
-    fun validCredentials(valid: Boolean) {
-        if (!valid) {
-            emailError.set(R.string.invalid_credentials)
-            passwordError.set(R.string.invalid_credentials)
-            emailErrorVisibility.set(View.GONE)
-        } else {
-            resetErrors()
-        }
+    fun setInvalidCredentialsError() {
+        emailError.set(R.string.invalid_credentials)
+        passwordError.set(R.string.invalid_credentials)
+        emailErrorVisibility.set(View.GONE)
     }
 
-    private fun resetErrors() {
+    fun resetErrors() {
         emailError.set(null)
         passwordError.set(null)
         emailErrorVisibility.set(View.VISIBLE)

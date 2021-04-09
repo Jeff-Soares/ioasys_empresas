@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas.ui
+package br.com.ioasys.empresas.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,15 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.ioasys.empresas.BuildConfig
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ItemCompanyBinding
-import br.com.ioasys.empresas.presentation.data.Company
+import br.com.ioasys.empresas.presentation.model.Company
 import com.bumptech.glide.Glide
 
-class CompanyListAdapter (private val callback: (Company) -> Unit): RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder>() {
+class CompanyListAdapter(private val callback: (Company) -> Unit) :
+    RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder>() {
 
     private var companies: List<Company> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
-        val binding = ItemCompanyBinding.inflate(LayoutInflater.from(parent.context), parent,false)
+        val binding = ItemCompanyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CompanyViewHolder(binding)
     }
 
@@ -25,20 +26,21 @@ class CompanyListAdapter (private val callback: (Company) -> Unit): RecyclerView
 
     override fun getItemCount(): Int = companies.size
 
-    inner class CompanyViewHolder (private val binding: ItemCompanyBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class CompanyViewHolder(private val binding: ItemCompanyBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(company: Company) {
-            with (binding){
+            with(binding) {
                 companyName.text = company.name
                 companyType.text = company.type.typeName
                 companyCountry.text = company.country
                 if (!company.pathImage.isNullOrEmpty()) setImage(companyImg, company.pathImage)
-                root.setOnClickListener{ callback.invoke(company) }
+                root.setOnClickListener { callback.invoke(company) }
             }
         }
 
-        private fun setImage(view: ImageView, url: String?){
-            Glide.with(itemView.context)
+        private fun setImage(view: ImageView, url: String?) {
+            Glide.with(view.context)
                 .load(BuildConfig.BASE_URL + url)
                 .centerCrop()
                 .placeholder(R.drawable.company_img)
@@ -48,13 +50,11 @@ class CompanyListAdapter (private val callback: (Company) -> Unit): RecyclerView
 
     }
 
-    fun setItems(list: List<Company>){
+    fun setItems(list: List<Company>) {
         companies = list
         notifyDataSetChanged()
     }
 
-    fun isEmpty(): Boolean{
-        if (companies.isEmpty()) return true
-        return false
-    }
+    fun isEmpty(): Boolean = companies.isEmpty()
+
 }

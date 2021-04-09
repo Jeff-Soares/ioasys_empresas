@@ -8,28 +8,16 @@
 
     <fragment
         android:id="@+id/companyListFragment"
-        android:name="br.com.ioasys.empresas.ui.CompanyListFragment"
+        android:name="br.com.ioasys.empresas.ui.fragments.CompanyListFragment"
         android:label="activity_company_list"
         tools:layout="@layout/fragment_company_list" >
-        <argument
-            android:name="accessToken"
-            app:argType="string"
-            app:nullable="false"/>
-        <argument
-            android:name="client"
-            app:argType="string"
-            app:nullable="false"/>
-        <argument
-            android:name="uid"
-            app:argType="string"
-            app:nullable="false"/>
         <action
             android:id="@+id/action_companyListFragment_to_companyDetailFragment"
             app:destination="@id/companyDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/companyDetailFragment"
-        android:name="br.com.ioasys.empresas.ui.CompanyDetailFragment"
+        android:name="br.com.ioasys.empresas.ui.fragments.CompanyDetailFragment"
         android:label="fragment_company_detail"
         tools:layout="@layout/fragment_company_detail" >
         <argument

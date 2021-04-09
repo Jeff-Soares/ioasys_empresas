@@ -1,4 +1,4 @@
-package br.com.ioasys.empresas.ui
+package br.com.ioasys.empresas.ui.fragments
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
@@ -25,7 +25,7 @@ class CompanyDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCompanyDetailBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Empresas">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:theme="@style/Theme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.CompanyActivity" />
+        <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".ui.activities.CompanyActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

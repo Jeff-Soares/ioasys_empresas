@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CompanyListFragment">
+    tools:context=".ui.fragments.CompanyListFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_company"
@@ -53,6 +53,9 @@
         android:layout_below="@id/toolbar_company"
         android:background="@color/beige"
         android:paddingVertical="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
@@ -65,7 +68,6 @@
         android:gravity="center"
         android:textSize="16sp"
         android:fontFamily="sans-serif"
-        android:textAlignment="center"
-        android:visibility="gone"/>
+        android:textAlignment="center"/>
 
 </RelativeLayout>

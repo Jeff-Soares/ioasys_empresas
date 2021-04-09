@@ -1,39 +1,41 @@
 package br.com.ioasys.empresas.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import br.com.ioasys.empresas.presentation.data.Company
-import br.com.ioasys.empresas.remote.CompanyService
-import br.com.ioasys.empresas.remote.GetCompaniesResponse
-import br.com.ioasys.empresas.remote.toModel
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.viewModelScope
+import br.com.ioasys.empresas.data.Repository
+import br.com.ioasys.empresas.presentation.model.Company
+import br.com.ioasys.empresas.data.remote.ResultWrapper.*
+import br.com.ioasys.empresas.util.viewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class CompanyListViewModel(
-    private val service: CompanyService
-): ViewModel() {
-    private val _companiesLiveData = MutableLiveData<List<Company>>()
-    val companiesLiveData: LiveData<List<Company>> = _companiesLiveData
+    private val repository: Repository
+) : ViewModel() {
+    private val _companiesLiveData by viewState<List<Company>>()
+    val companiesLiveData: LiveData<ViewState<List<Company>>> = _companiesLiveData
 
-    fun getCompanies(accessToken: String, client: String, uid: String, query: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val response = service.getEnterprisesByName(
-                accessToken = accessToken,
-                client = client,
-                uid = uid,
-                name = query
+    fun getCompaniesByName(query: String) {
+        viewModelScope.launch(Dispatchers.Main) {
+            val headers = repository.getHeaders()
+            val response = repository.getEnterprisesByName(
+                query = query,
+                headers = headers
             )
-            handleResponse(response)
+            when (response) {
+                is Success -> onSearchSuccess(response.data)
+                is Failure -> onSearchError()
+            }
         }
     }
 
-    private fun handleResponse(response: Response<GetCompaniesResponse>){
-        if (response.isSuccessful){
-            _companiesLiveData.value = response.body()?.companies?.map { it.toModel() }
-        }
+    private fun onSearchSuccess(list: List<Company>?) {
+        list?.let { _companiesLiveData.value = ViewState.success(list) }
+    }
+
+    private fun onSearchError() {
+        _companiesLiveData.value = ViewState.error(Throwable("Search Failed"))
     }
 
 }

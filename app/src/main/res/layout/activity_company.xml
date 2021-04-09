@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CompanyActivity">
+    tools:context=".ui.activities.CompanyActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/company_fragment_view"
