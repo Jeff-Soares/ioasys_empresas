@@ -1,7 +1,7 @@
 package br.com.ioasys.empresas.data
 
-import br.com.ioasys.empresas.data.model.CompanyResponse
-import br.com.ioasys.empresas.data.model.CompanyTypeResponse
+import br.com.ioasys.empresas.data.remote.company.model.CompanyResponse
+import br.com.ioasys.empresas.data.remote.company.model.CompanyTypeResponse
 import br.com.ioasys.empresas.presentation.model.Company
 import br.com.ioasys.empresas.presentation.model.CompanyType
 

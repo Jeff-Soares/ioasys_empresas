@@ -7,7 +7,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.ioasys.empresas.data.Repository
+import br.com.ioasys.empresas.data.LoginRepository
 import br.com.ioasys.empresas.presentation.model.LoginFields
 import br.com.ioasys.empresas.data.remote.ResultWrapper
 import br.com.ioasys.empresas.data.remote.ResultWrapper.Success
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import okhttp3.Headers
 
 class LoginViewModel(
-    private val repository: Repository
+    private val repository: LoginRepository
 ) : ViewModel() {
     private val _loginStateLiveData by viewState<Unit>()
     val loginStateLiveData: LiveData<ViewState<Unit>> = _loginStateLiveData

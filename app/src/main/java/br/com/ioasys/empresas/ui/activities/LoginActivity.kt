@@ -56,10 +56,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onLoginLoading(loading: Boolean) {
-        if (loading)
-            loginBinding.loadingGroup.visibility = View.VISIBLE
-        else
-            loginBinding.loadingGroup.visibility = View.GONE
+        loginBinding.loadingGroup.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
 }
