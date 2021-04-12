@@ -19,6 +19,9 @@
     <style name="Theme.Empresas.SearchView" parent="@style/Theme.Empresas">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:titleMarginStart">20dp</item>
         <item name="android:strokeWidth">5</item>
     </style>
 

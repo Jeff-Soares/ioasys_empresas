@@ -9,12 +9,12 @@ import androidx.databinding.DataBindingUtil
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ActivityLoginBinding
 import br.com.ioasys.empresas.presentation.LoginViewModel
-import br.com.ioasys.empresas.presentation.LoginViewModelFactory
 import br.com.ioasys.empresas.presentation.ViewState.State.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: LoginViewModel
+    private val loginViewModel by viewModel<LoginViewModel>()
     private lateinit var loginBinding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +28,11 @@ class LoginActivity : AppCompatActivity() {
     private fun setupBindings() {
         loginBinding = DataBindingUtil
             .setContentView(this, R.layout.activity_login)
-        viewModel = LoginViewModelFactory.create(this, this)
-        loginBinding.viewModel = viewModel
+        loginBinding.viewModel = loginViewModel
     }
 
     private fun setObservers() {
-        viewModel.loginStateLiveData.observe(this, { result ->
+        loginViewModel.loginStateLiveData.observe(this, { result ->
             when (result.state) {
                 SUCCESS -> onLoginSuccess()
                 ERROR -> onLoginError()

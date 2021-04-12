@@ -2,6 +2,7 @@ package br.com.ioasys.empresas.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
 import br.com.ioasys.empresas.presentation.ViewState.State.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -10,14 +11,15 @@ import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.FragmentCompanyListBinding
 import br.com.ioasys.empresas.presentation.model.Company
 import br.com.ioasys.empresas.presentation.CompanyListViewModel
-import br.com.ioasys.empresas.presentation.CompanyViewModelFactory
 import br.com.ioasys.empresas.ui.adapters.CompanyListAdapter
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CompanyListFragment : Fragment() {
 
     private val compAdapter by lazy { CompanyListAdapter(::clickItem) }
     private lateinit var binding: FragmentCompanyListBinding
-    private lateinit var viewModel: CompanyListViewModel
+    private val companyViewModel by viewModel<CompanyListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +39,6 @@ class CompanyListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view.context.setTheme(R.style.Theme_CompanyList)
 
-        viewModel = CompanyViewModelFactory.create(this, requireContext())
         binding.recyclerViewCompany.adapter = compAdapter
 
         configureSearchView()
@@ -56,7 +57,7 @@ class CompanyListFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.companiesLiveData.observe(viewLifecycleOwner, { result ->
+        companyViewModel.companiesLiveData.observe(viewLifecycleOwner, { result ->
             when (result.state) {
                 SUCCESS -> onSearchSuccess(result.data)
                 ERROR -> onSearchError()
@@ -86,7 +87,7 @@ class CompanyListFragment : Fragment() {
         companySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?) = false
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.getCompaniesByName(query = companySearch.query.toString())
+                companyViewModel.getCompaniesByName(query = companySearch.query.toString())
                 return false
             }
         })
