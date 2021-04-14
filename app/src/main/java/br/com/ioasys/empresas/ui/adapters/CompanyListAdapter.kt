@@ -34,7 +34,7 @@ class CompanyListAdapter(private val clickListener: CompanyAdapterListener) :
                 companyType.text = company.type.typeName
                 companyCountry.text = company.country
                 companyImg.setCompanyImage(company.pathImage)
-                companyFavIcon.visibility = if(company.favorite) View.VISIBLE else View.GONE
+                companyFavIcon.visibility = if (company.favorite) View.VISIBLE else View.GONE
                 root.setOnClickListener { clickListener.onClickItem(company) }
                 root.setOnLongClickListener { clickListener.onLongClickItem(company, position) }
             }
@@ -47,17 +47,17 @@ class CompanyListAdapter(private val clickListener: CompanyAdapterListener) :
         notifyDataSetChanged()
     }
 
-    fun setFavorite(position: Int){
+    fun setFavorite(position: Int) {
         companies[position].favorite = true
         notifyItemChanged(position)
     }
 
-    fun removeFavorite(position: Int){
+    fun removeFavorite(position: Int) {
         companies[position].favorite = false
         notifyItemChanged(position)
     }
 
-    fun removeItem(position: Int){
+    fun removeItem(position: Int) {
         companies.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount)

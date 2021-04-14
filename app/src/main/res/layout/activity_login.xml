@@ -130,12 +130,23 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recover_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password_question"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/greeny_blue"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/login_pass_input_layout"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_submit"
             android:layout_width="270dp"
             android:layout_height="44dp"
-            android:layout_marginTop="30dp"
-            android:background="#57bbbc"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_bg"
             android:onClick="@{() -> viewModel.login()}"
             android:radius="5dp"
             android:text="@string/sign_in"
@@ -143,7 +154,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_pass_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/recover_link" />
 
         <View
             android:id="@+id/loading_background"

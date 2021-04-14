@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import br.com.ioasys.empresas.data.Constants
 import br.com.ioasys.empresas.data.local.DatabaseConfiguration
 import br.com.ioasys.empresas.data.local.LocalDataSource
+import br.com.ioasys.empresas.data.local.LocalDataSourceImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -14,7 +15,7 @@ val dataLocalModule = module {
         return context.getSharedPreferences(Constants.SHARED_PREF_FILE, Context.MODE_PRIVATE)
     }
 
-    single { LocalDataSource(provideSharedPreferences(androidContext()), get()) }
+    single<LocalDataSource> { LocalDataSourceImpl(provideSharedPreferences(androidContext()), get()) }
 
     single { DatabaseConfiguration.getDatabaseInstance(androidContext()).provideCompanyDao() }
 

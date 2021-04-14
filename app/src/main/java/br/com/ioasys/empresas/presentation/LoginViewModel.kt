@@ -12,7 +12,8 @@ import br.com.ioasys.empresas.presentation.model.LoginFields
 import br.com.ioasys.empresas.data.remote.ResultWrapper
 import br.com.ioasys.empresas.data.remote.ResultWrapper.Success
 import br.com.ioasys.empresas.data.remote.ResultWrapper.Failure
-import br.com.ioasys.empresas.util.viewState
+import br.com.ioasys.empresas.presentation.model.LoginTextWatcher
+import br.com.ioasys.empresas.util.companySearchState
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +23,13 @@ import okhttp3.Headers
 class LoginViewModel(
     private val repository: LoginRepository
 ) : ViewModel() {
-    private val _loginStateLiveData by viewState<Unit>()
-    val loginStateLiveData: LiveData<ViewState<Unit>> = _loginStateLiveData
+    private val _loginStateLiveData by companySearchState<Unit>()
+    val loginStateLiveData: LiveData<CompanySearchState<Unit>> = _loginStateLiveData
     val login: LoginFields = LoginFields()
 
     fun login() {
         if (login.validateEmail() && login.validatePassword()) {
-            _loginStateLiveData.value = ViewState.loading(true)
+            _loginStateLiveData.value = CompanySearchState.loading(true)
             viewModelScope.launch(Dispatchers.Main) {
                 handleLogin(repository.login(login.email, login.password))
             }
@@ -40,25 +41,21 @@ class LoginViewModel(
             is Success -> onLoginSuccess(response.data)
             is Failure -> onLoginError()
         }
-        _loginStateLiveData.value = ViewState.loading(false)
+        _loginStateLiveData.value = CompanySearchState.loading(false)
     }
 
     private fun onLoginSuccess(headers: Headers?) {
-        headers?.let { _loginStateLiveData.value = ViewState.success(Unit) }
+        headers?.let { _loginStateLiveData.value = CompanySearchState.success(Unit) }
     }
 
     private fun onLoginError() {
-        _loginStateLiveData.value = ViewState.error(Throwable("Login Failed"))
+        _loginStateLiveData.value = CompanySearchState.error(Throwable("Login Failed"))
         login.setInvalidCredentialsError()
     }
 
-    fun getPasswordOnFocusChangeListener(): TextWatcher {
-        return object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                login.resetErrors()
-            }
+    fun getPasswordOnFocusChangeListener() = object : LoginTextWatcher() {
+        override fun afterTextChanged(s: Editable?) {
+            login.resetErrors()
         }
     }
 

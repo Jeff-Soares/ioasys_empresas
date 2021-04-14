@@ -1,6 +1,6 @@
 package br.com.ioasys.empresas.presentation
 
-class ViewState<T>(
+class CompanySearchState<T>(
     val data: T? = null,
     val state: State,
     val isLoading: Boolean = false,
@@ -8,11 +8,11 @@ class ViewState<T>(
 ) {
     companion object {
         fun <T> loading(isLoading: Boolean) =
-            ViewState<T>(isLoading = isLoading, state = State.LOADING)
+            CompanySearchState<T>(isLoading = isLoading, state = State.LOADING)
         fun <T> success(data: T) =
-            ViewState<T>(data = data, state = State.SUCCESS)
+            CompanySearchState<T>(data = data, state = State.SUCCESS)
         fun <T> error(error: Throwable) =
-            ViewState<T>(error = error, state = State.ERROR)
+            CompanySearchState<T>(error = error, state = State.ERROR)
     }
 
     enum class State {

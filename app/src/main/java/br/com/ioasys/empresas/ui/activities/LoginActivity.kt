@@ -9,7 +9,8 @@ import androidx.databinding.DataBindingUtil
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ActivityLoginBinding
 import br.com.ioasys.empresas.presentation.LoginViewModel
-import br.com.ioasys.empresas.presentation.ViewState.State.*
+import br.com.ioasys.empresas.presentation.CompanySearchState.State.*
+import br.com.ioasys.empresas.ui.fragments.LoginRecoverFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
@@ -23,12 +24,13 @@ class LoginActivity : AppCompatActivity() {
 
         setupBindings()
         setObservers()
-        onLoginSuccess()
+        loginBinding.recoverLink.setOnClickListener {
+            LoginRecoverFragment().show(supportFragmentManager, "LoginRecoverFragment")
+        }
     }
 
     private fun setupBindings() {
-        loginBinding = DataBindingUtil
-            .setContentView(this, R.layout.activity_login)
+        loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginBinding.viewModel = loginViewModel
     }
 

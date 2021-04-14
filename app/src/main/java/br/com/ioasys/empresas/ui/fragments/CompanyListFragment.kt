@@ -15,7 +15,8 @@ import androidx.navigation.fragment.findNavController
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.FragmentCompanyListBinding
 import br.com.ioasys.empresas.presentation.CompanyListViewModel
-import br.com.ioasys.empresas.presentation.ViewState.State.*
+import br.com.ioasys.empresas.presentation.CompanySearchState.State.*
+import br.com.ioasys.empresas.presentation.FavoriteState
 import br.com.ioasys.empresas.presentation.model.Company
 import br.com.ioasys.empresas.ui.activities.LoginActivity
 import br.com.ioasys.empresas.ui.adapters.CompanyAdapterListener
@@ -51,17 +52,19 @@ class CompanyListFragment : Fragment() {
         setObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (!binding.companySearch.isIconified) binding.logoToolbar.visibility = View.GONE
-    }
-
     private fun setObservers() {
         companyViewModel.companiesLiveData.observe(viewLifecycleOwner, { result ->
             when (result.state) {
                 SUCCESS -> onSearchSuccess(result.data)
                 ERROR -> onSearchError()
                 LOADING -> onSearchLoading(result.isLoading)
+            }
+        })
+        companyViewModel.favoritesLiveData.observe(viewLifecycleOwner, { result ->
+            when (result.state) {
+                FavoriteState.State.SUCCESS_ADD -> onFavoriteSuccessAdd(result.data!!)
+                FavoriteState.State.SUCCESS_REMOVED -> onFavoriteSuccessRemoved(result.data!!)
+                FavoriteState.State.ERROR -> onFavoriteError()
             }
         })
     }
@@ -79,6 +82,20 @@ class CompanyListFragment : Fragment() {
 
     private fun onSearchLoading(isLoading: Boolean) {
         if (isLoading) binding.emptyRecyclerviewText.text = getString(R.string.loading_search)
+    }
+
+    private fun onFavoriteSuccessAdd(index: Int) {
+        compAdapter.setFavorite(index)
+        getString(R.string.added_to_fav).toast(requireContext())
+    }
+
+    private fun onFavoriteSuccessRemoved(index: Int) {
+        compAdapter.removeItem(index)
+        getString(R.string.remove_from_fav).toast(requireContext())
+    }
+
+    private fun onFavoriteError() {
+        "Error".toast(requireContext())
     }
 
     private fun setupSearchView() {
@@ -121,8 +138,8 @@ class CompanyListFragment : Fragment() {
                 binding.companyListLayout.requestFocus()
                 when (item.itemId) {
                     R.id.op_favorite -> companyViewModel.getCompaniesFromFavorites()
-                    R.id.op_logout -> logout()
-                    R.id.op_about -> clickAboutOption()
+                    R.id.op_logout -> clickLogout()
+                    R.id.op_about -> clickAbout()
                 }
                 return@setNavigationItemSelectedListener false
             }
@@ -133,12 +150,12 @@ class CompanyListFragment : Fragment() {
         }
     }
 
-    private fun logout() {
+    private fun clickLogout() {
         companyViewModel.logout()
         requireActivity().startActivity(Intent(requireActivity(), LoginActivity::class.java))
     }
 
-    private fun clickAboutOption() {
+    private fun clickAbout() {
         findNavController().navigate(
             CompanyListFragmentDirections.actionCompanyListFragmentToAboutFragment()
         )
@@ -168,7 +185,7 @@ class CompanyListFragment : Fragment() {
                 )
                 setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel)) { _, _ -> }
                 setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.yes)) { _, _ ->
-                    positiveButton(company, index)
+                    companyViewModel.favoriteDialogConfirm(company, index)
                 }
                 show()
             }
@@ -176,16 +193,9 @@ class CompanyListFragment : Fragment() {
         }
     }
 
-    fun positiveButton(company: Company, index: Int) {
-        if (!company.favorite) {
-            companyViewModel.saveCompanyIntoFavorites(company)
-            compAdapter.setFavorite(index)
-            getString(R.string.added_to_fav).toast(requireContext())
-        } else {
-            companyViewModel.removeCompanyFromFavorites(company)
-            compAdapter.removeItem(index)
-            getString(R.string.remove_from_fav).toast(requireContext())
-        }
+    override fun onResume() {
+        super.onResume()
+        if (!binding.companySearch.isIconified) binding.logoToolbar.visibility = View.GONE
     }
 
 }

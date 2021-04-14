@@ -31,5 +31,6 @@
     <string name="country">País</string>
     <string name="type">Tipo</string>
     <string name="enterprise_name">Nome da Empresa</string>
+    <string name="forgot_password_question"><u>Esqueceu a senha?</u></string>
 
 </resources>
