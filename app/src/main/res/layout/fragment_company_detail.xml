@@ -12,7 +12,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/company_toolbar_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@drawable/toolbar_bg"
         android:theme="@style/Theme.Empresas"
         android:layout_margin="0dp"
@@ -43,6 +43,7 @@
         android:text="@string/company_description"
         android:textAlignment="textStart"
         android:textColor="@color/warm_grey"
+        android:layout_marginBottom="20dp"
         android:textSize="17sp"
         android:scrollbars="vertical"/>
 

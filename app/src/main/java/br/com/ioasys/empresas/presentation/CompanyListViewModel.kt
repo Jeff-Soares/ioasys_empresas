@@ -17,6 +17,7 @@ class CompanyListViewModel(
     val companiesLiveData: LiveData<ViewState<List<Company>>> = _companiesLiveData
 
     fun getCompaniesByName(query: String) {
+        _companiesLiveData.value = ViewState.loading(true)
         viewModelScope.launch(Dispatchers.Main) {
             when (val response = repository.getEnterprisesByName(query = query)) {
                 is Success -> onSearchSuccess(response.data)
@@ -25,12 +26,38 @@ class CompanyListViewModel(
         }
     }
 
-    private fun onSearchSuccess(list: List<Company>?) {
-        list?.let { _companiesLiveData.value = ViewState.success(list) }
+    private suspend fun onSearchSuccess(list: List<Company>?) {
+        list?.let {
+            val fav = repository.getFavoritesEnterprises()
+            list.map { if (fav.contains(it)) it.favorite = true }
+            _companiesLiveData.value = ViewState.success(list)
+        }
     }
 
     private fun onSearchError() {
         _companiesLiveData.value = ViewState.error(Throwable("Search Failed"))
+    }
+
+    fun logout (){
+        repository.logout()
+    }
+
+    fun saveCompanyIntoFavorites(company: Company) {
+        viewModelScope.launch(Dispatchers.Main) {
+            repository.saveFavoriteEnterprise(company)
+        }
+    }
+
+    fun removeCompanyFromFavorites(company: Company) {
+        viewModelScope.launch(Dispatchers.Main) {
+            repository.removeFavoriteEnterprise(company)
+        }
+    }
+
+    fun getCompaniesFromFavorites() {
+        viewModelScope.launch(Dispatchers.Main) {
+            _companiesLiveData.value = ViewState.success(repository.getFavoritesEnterprises())
+        }
     }
 
 }

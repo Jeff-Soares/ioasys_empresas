@@ -7,4 +7,12 @@ interface CompanyRepository {
 
     suspend fun getEnterprisesByName(query: String): ResultWrapper<List<Company>>
 
+    suspend fun saveFavoriteEnterprise(company: Company)
+
+    suspend fun removeFavoriteEnterprise(company: Company)
+
+    suspend fun getFavoritesEnterprises(): List<Company>
+
+    fun logout()
+
 }

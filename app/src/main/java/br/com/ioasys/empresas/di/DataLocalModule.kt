@@ -16,7 +16,7 @@ val dataLocalModule = module {
 
     single { LocalDataSource(provideSharedPreferences(androidContext()), get()) }
 
-    single { DatabaseConfiguration.getDatabaseInstance(androidContext()).provideHeadersDao() }
+    single { DatabaseConfiguration.getDatabaseInstance(androidContext()).provideCompanyDao() }
 
 
 }

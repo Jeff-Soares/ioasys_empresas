@@ -25,18 +25,4 @@ interface CompanyService {
         @Query("name") name: String
     ): Response<GetCompaniesResponse>
 
-    companion object {
-        fun newInstance(): CompanyService = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL_API)
-            .client(getClient())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(CompanyService::class.java)
-
-        private fun getClient(): OkHttpClient = OkHttpClient.Builder()
-            .readTimeout(60, TimeUnit.SECONDS)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor().apply{
-                level = HttpLoggingInterceptor.Level.BODY
-            }).build()
-    }
 }

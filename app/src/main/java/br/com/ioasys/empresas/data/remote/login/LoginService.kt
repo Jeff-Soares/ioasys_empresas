@@ -18,18 +18,4 @@ interface LoginService {
         @Body loginRequest: LoginRequest
     ): Response<Headers>
 
-    companion object {
-        fun newInstance(): LoginService = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL_API)
-            .client(getClient())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(LoginService::class.java)
-
-        private fun getClient(): OkHttpClient = OkHttpClient.Builder()
-            .readTimeout(60, TimeUnit.SECONDS)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor().apply{
-                level = HttpLoggingInterceptor.Level.BODY
-            }).build()
-    }
 }

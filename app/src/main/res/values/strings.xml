@@ -13,5 +13,23 @@
     <string name="invalid_credentials">Credenciais informadas são inválidas, tente novamente.</string>
     <string name="search">Pesquisar</string>
     <string name="click_to_search">Clique na busca para iniciar.</string>
+    <string name="loading_search">Buscando empresas</string>
     <string name="no_results">Nenhuma empresa foi encontrada para a busca realizada.</string>
+    <string name="menu_open">Menu aberto</string>
+    <string name="menu_close">Menu fechado</string>
+    <string name="favorites">Favoritos</string>
+    <string name="logout">Sair</string>
+    <string name="about">Sobre</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="cancel">Cancelar</string>
+    <string name="alert_dialog_fav_title">Favoritos</string>
+    <string name="alert_dialog_fav_add">Você deseja salvar <b>%1$s</b> nos seus favoritos?</string>
+    <string name="alert_dialog_fav_delete">Você deseja remover <b>%1$s</b> dos seus favoritos?</string>
+    <string name="added_to_fav">A empresa foi adicionada aos seus favoritos</string>
+    <string name="remove_from_fav">A empresa foi removida dos seus favoritos</string>
+    <string name="country">País</string>
+    <string name="type">Tipo</string>
+    <string name="enterprise_name">Nome da Empresa</string>
+
 </resources>

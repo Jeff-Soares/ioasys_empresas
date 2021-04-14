@@ -23,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
         setupBindings()
         setObservers()
+        onLoginSuccess()
     }
 
     private fun setupBindings() {

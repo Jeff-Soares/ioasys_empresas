@@ -10,7 +10,8 @@ object DatabaseConfiguration {
             context,
             EmpresasDataBase::class.java,
             "empresas_db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
 }

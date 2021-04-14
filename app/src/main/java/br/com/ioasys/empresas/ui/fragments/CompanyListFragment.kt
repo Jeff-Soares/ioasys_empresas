@@ -1,37 +1,42 @@
 package br.com.ioasys.empresas.ui.fragments
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
-import br.com.ioasys.empresas.presentation.ViewState.State.*
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.FragmentCompanyListBinding
-import br.com.ioasys.empresas.presentation.model.Company
 import br.com.ioasys.empresas.presentation.CompanyListViewModel
+import br.com.ioasys.empresas.presentation.ViewState.State.*
+import br.com.ioasys.empresas.presentation.model.Company
+import br.com.ioasys.empresas.ui.activities.LoginActivity
+import br.com.ioasys.empresas.ui.adapters.CompanyAdapterListener
 import br.com.ioasys.empresas.ui.adapters.CompanyListAdapter
-import org.koin.android.ext.android.inject
+import br.com.ioasys.empresas.util.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class CompanyListFragment : Fragment() {
 
-    private val compAdapter by lazy { CompanyListAdapter(::clickItem) }
     private lateinit var binding: FragmentCompanyListBinding
     private val companyViewModel by viewModel<CompanyListViewModel>()
+    private val compAdapter by lazy {
+        CompanyListAdapter(setupAdapterListener())
+    }
+    private lateinit var alertDialog: AlertDialog
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCompanyListBinding.inflate(
-            layoutInflater,
-            container,
-            false
-        )
-        setHasOptionsMenu(true)
+        binding = FragmentCompanyListBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -39,21 +44,16 @@ class CompanyListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view.context.setTheme(R.style.Theme_CompanyList)
 
+        alertDialog = AlertDialog.Builder(requireContext(), R.style.Theme_MyAlertDialogStyle).create()
         binding.recyclerViewCompany.adapter = compAdapter
-
-        configureSearchView()
+        setupSearchView()
+        setupDrawerLayout(binding.drawerLayout, binding.toolbarCompany)
         setObservers()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.company_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onResume() {
         super.onResume()
-        if (!binding.companySearch.isIconified)
-            binding.logoToolbar.visibility = View.GONE
+        if (!binding.companySearch.isIconified) binding.logoToolbar.visibility = View.GONE
     }
 
     private fun setObservers() {
@@ -77,11 +77,11 @@ class CompanyListFragment : Fragment() {
         binding.emptyRecyclerviewText.visibility = View.VISIBLE
     }
 
-    private fun onSearchLoading(loading: Boolean) {
-        TODO("Implementar frase de loading na tela (ex: Buscando empresas...")
+    private fun onSearchLoading(isLoading: Boolean) {
+        if (isLoading) binding.emptyRecyclerviewText.text = getString(R.string.loading_search)
     }
 
-    private fun configureSearchView() {
+    private fun setupSearchView() {
         val companySearch: SearchView = binding.companySearch
 
         companySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -110,14 +110,82 @@ class CompanyListFragment : Fragment() {
         }
     }
 
-    private fun clickItem(company: Company) {
-        findNavController().navigate(
-            CompanyListFragmentDirections.actionCompanyListFragmentToCompanyDetailFragment(
-                name = company.name,
-                imageUrl = company.pathImage,
-                description = company.description
+    private fun setupDrawerLayout(drawer: DrawerLayout, toolbar: Toolbar) {
+        (activity as AppCompatActivity).run {
+            setSupportActionBar(toolbar)
+            val drawerToggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.menu_open, R.string.menu_close
             )
+            binding.companyNavigationView.setNavigationItemSelectedListener { item ->
+                drawer.closeDrawers()
+                binding.companyListLayout.requestFocus()
+                when (item.itemId) {
+                    R.id.op_favorite -> companyViewModel.getCompaniesFromFavorites()
+                    R.id.op_logout -> logout()
+                    R.id.op_about -> clickAboutOption()
+                }
+                return@setNavigationItemSelectedListener false
+            }
+            drawer.addDrawerListener(drawerToggle)
+            drawer.post {
+                drawerToggle.syncState()
+            }
+        }
+    }
+
+    private fun logout() {
+        companyViewModel.logout()
+        requireActivity().startActivity(Intent(requireActivity(), LoginActivity::class.java))
+    }
+
+    private fun clickAboutOption() {
+        findNavController().navigate(
+            CompanyListFragmentDirections.actionCompanyListFragmentToAboutFragment()
         )
+    }
+
+    private fun setupAdapterListener() = object : CompanyAdapterListener {
+
+        override fun onClickItem(company: Company) {
+            findNavController().navigate(
+                CompanyListFragmentDirections.actionCompanyListFragmentToCompanyDetailFragment(
+                    name = company.name,
+                    imageUrl = company.pathImage,
+                    description = company.description
+                )
+            )
+        }
+
+        override fun onLongClickItem(company: Company, index: Int): Boolean {
+            alertDialog.apply {
+                setTitle(getString(R.string.alert_dialog_fav_title))
+                setMessage(
+                    String.format(
+                        if (!company.favorite) getString(R.string.alert_dialog_fav_add)
+                        else getString(R.string.alert_dialog_fav_delete),
+                        company.name
+                    )
+                )
+                setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel)) { _, _ -> }
+                setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.yes)) { _, _ ->
+                    positiveButton(company, index)
+                }
+                show()
+            }
+            return true
+        }
+    }
+
+    fun positiveButton(company: Company, index: Int) {
+        if (!company.favorite) {
+            companyViewModel.saveCompanyIntoFavorites(company)
+            compAdapter.setFavorite(index)
+            getString(R.string.added_to_fav).toast(requireContext())
+        } else {
+            companyViewModel.removeCompanyFromFavorites(company)
+            compAdapter.removeItem(index)
+            getString(R.string.remove_from_fav).toast(requireContext())
+        }
     }
 
 }

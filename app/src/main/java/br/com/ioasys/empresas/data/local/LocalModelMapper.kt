@@ -1,23 +1,28 @@
 package br.com.ioasys.empresas.data.local
 
-import br.com.ioasys.empresas.data.Constants.HEADER_ACCESS_TOKEN
-import br.com.ioasys.empresas.data.Constants.HEADER_CLIENT
-import br.com.ioasys.empresas.data.Constants.HEADER_UID
-import br.com.ioasys.empresas.data.Constants.KEY_ACCESS_TOKEN
-import br.com.ioasys.empresas.data.Constants.KEY_UID
-import br.com.ioasys.empresas.data.Constants.KEY_CLIENT
-import okhttp3.Headers
+import br.com.ioasys.empresas.presentation.model.Company
+import br.com.ioasys.empresas.presentation.model.CompanyType
 
-fun Headers.toLocalModel() =
-    HeadersLocal(
-        token = this[KEY_ACCESS_TOKEN] ?: "",
-        uid = this[KEY_UID] ?: "",
-        client = this[KEY_CLIENT] ?: ""
+fun Company.toLocalModel() =
+    CompanyLocal(
+        id = id,
+        name = name,
+        pathImage = pathImage,
+        city = city,
+        country = country,
+        description = description,
+        favorite = true
     )
 
-fun HeadersLocal.fromLocalModel() =
-    Headers.Builder()
-        .add(HEADER_ACCESS_TOKEN, token)
-        .add(HEADER_UID, uid)
-        .add(HEADER_CLIENT, client)
-        .build()
+fun CompanyLocal.fromLocalModel() =
+    Company(
+        id = id,
+        name = name,
+        pathImage = pathImage,
+        city = city,
+        country = country,
+        description = description,
+        favorite = favorite,
+        sharePrice = null,
+        type = CompanyType(0, "null")
+    )

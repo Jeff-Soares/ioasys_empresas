@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_company_search"
-        android:icon="@drawable/ic_search_white"
-        android:title="Search"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.SearchView"
-        android:actionLayout="@layout/fragment_company_list"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/company_menu_items">
+        <item
+            android:id="@+id/op_favorite"
+            android:icon="@drawable/ic_favorite_30"
+            android:title="@string/favorites" />
+        <item
+            android:id="@+id/op_logout"
+            android:icon="@drawable/ic_logout_30"
+            android:title="@string/logout" />
+        <item
+            android:id="@+id/op_about"
+            android:icon="@drawable/ic_info_30"
+            android:title="@string/about" />
+    </group>
 </menu>

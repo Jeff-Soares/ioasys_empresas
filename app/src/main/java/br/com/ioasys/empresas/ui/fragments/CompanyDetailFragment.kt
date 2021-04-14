@@ -42,14 +42,11 @@ class CompanyDetailFragment : Fragment() {
         setupToolbar()
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupToolbar(){
-        val upArrow: Drawable = resources.getDrawable(R.drawable.ic_arrow_back, null)
         (activity as AppCompatActivity).run {
             setSupportActionBar(binding.companyToolbarDetail)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setHomeAsUpIndicator(upArrow)
         }
 
     }

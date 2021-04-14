@@ -1,19 +1,17 @@
 package br.com.ioasys.empresas.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import br.com.ioasys.empresas.BuildConfig
-import br.com.ioasys.empresas.R
 import br.com.ioasys.empresas.databinding.ItemCompanyBinding
 import br.com.ioasys.empresas.presentation.model.Company
-import com.bumptech.glide.Glide
+import br.com.ioasys.empresas.util.setCompanyImage
 
-class CompanyListAdapter(private val callback: (Company) -> Unit) :
+class CompanyListAdapter(private val clickListener: CompanyAdapterListener) :
     RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder>() {
 
-    private var companies: List<Company> = emptyList()
+    private var companies: MutableList<Company> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
         val binding = ItemCompanyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,31 +28,39 @@ class CompanyListAdapter(private val callback: (Company) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(company: Company) {
+            val position = adapterPosition
             with(binding) {
                 companyName.text = company.name
                 companyType.text = company.type.typeName
                 companyCountry.text = company.country
-                if (!company.pathImage.isNullOrEmpty()) setImage(companyImg, company.pathImage)
-                root.setOnClickListener { callback.invoke(company) }
+                companyImg.setCompanyImage(company.pathImage)
+                companyFavIcon.visibility = if(company.favorite) View.VISIBLE else View.GONE
+                root.setOnClickListener { clickListener.onClickItem(company) }
+                root.setOnLongClickListener { clickListener.onLongClickItem(company, position) }
             }
-        }
-
-        private fun setImage(view: ImageView, url: String?) {
-            Glide.with(view.context)
-                .load(BuildConfig.BASE_URL + url)
-                .centerCrop()
-                .placeholder(R.drawable.company_img)
-                .dontAnimate()
-                .into(view)
         }
 
     }
 
     fun setItems(list: List<Company>) {
-        companies = list
+        companies = list.toMutableList()
         notifyDataSetChanged()
     }
 
-    fun isEmpty(): Boolean = companies.isEmpty()
+    fun setFavorite(position: Int){
+        companies[position].favorite = true
+        notifyItemChanged(position)
+    }
+
+    fun removeFavorite(position: Int){
+        companies[position].favorite = false
+        notifyItemChanged(position)
+    }
+
+    fun removeItem(position: Int){
+        companies.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, itemCount)
+    }
 
 }

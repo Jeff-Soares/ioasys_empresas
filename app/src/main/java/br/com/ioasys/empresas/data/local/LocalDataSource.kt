@@ -7,11 +7,12 @@ import br.com.ioasys.empresas.data.Constants.HEADER_UID
 import br.com.ioasys.empresas.data.Constants.KEY_ACCESS_TOKEN
 import br.com.ioasys.empresas.data.Constants.KEY_CLIENT
 import br.com.ioasys.empresas.data.Constants.KEY_UID
+import br.com.ioasys.empresas.presentation.model.Company
 import okhttp3.Headers
 
 class LocalDataSource(
     private val sharedPreferences: SharedPreferences,
-    private val headersDao: HeadersDao
+    private val companyDao: CompanyDao
 ) {
 
     fun saveHeadersToPreferences(headers: Headers) {
@@ -37,11 +38,19 @@ class LocalDataSource(
         }
     }
 
-    suspend fun saveHeadersToLocalDatabase(headers: Headers) {
-        headersDao.saveHeaders(headers.toLocalModel())
+    suspend fun saveFavoritesToLocalDatabase(company: Company) {
+        companyDao.saveCompany(company.toLocalModel())
     }
 
-    suspend fun getHeadersFromLocalDatabase(): Headers {
-        return headersDao.getHeaders().fromLocalModel()
+    suspend fun removeFavoritesFromLocalDatabase(company: Company) {
+        companyDao.removeCompany(company.toLocalModel())
+    }
+
+    suspend fun getFavoritesFromLocalDatabase(): List<Company> {
+        return companyDao.getCompanies().map { it.fromLocalModel() }
+    }
+
+    fun logout(){
+        sharedPreferences.edit().clear().apply()
     }
 }

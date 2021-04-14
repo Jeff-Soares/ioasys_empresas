@@ -8,8 +8,14 @@ data class Company(
     val country: String,
     val description: String?,
     val sharePrice: Double?,
+    var favorite: Boolean = false,
     val type: CompanyType
-)
+){
+    override fun equals(other: Any?): Boolean {
+        (other as Company)
+        return id == other.id
+    }
+}
 
 data class CompanyType(
     val id : Int,
