@@ -53,20 +53,20 @@ class CompanyListFragment : Fragment() {
     }
 
     private fun setObservers() {
-        companyViewModel.companiesLiveData.observe(viewLifecycleOwner, { result ->
+        companyViewModel.companiesLiveData.observe(viewLifecycleOwner) { result ->
             when (result.state) {
                 SUCCESS -> onSearchSuccess(result.data)
                 ERROR -> onSearchError()
                 LOADING -> onSearchLoading(result.isLoading)
             }
-        })
-        companyViewModel.favoritesLiveData.observe(viewLifecycleOwner, { result ->
+        }
+        companyViewModel.favoriteLiveEvent.observe(viewLifecycleOwner) { result ->
             when (result.state) {
                 FavoriteState.State.SUCCESS_ADD -> onFavoriteSuccessAdd(result.data!!)
                 FavoriteState.State.SUCCESS_REMOVED -> onFavoriteSuccessRemoved(result.data!!)
                 FavoriteState.State.ERROR -> onFavoriteError()
             }
-        })
+        }
     }
 
     private fun onSearchSuccess(list: List<Company>?) {

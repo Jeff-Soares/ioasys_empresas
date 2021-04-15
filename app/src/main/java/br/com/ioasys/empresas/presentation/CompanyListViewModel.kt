@@ -16,8 +16,7 @@ class CompanyListViewModel(
 ) : ViewModel() {
     private val _companiesLiveData by companySearchState<List<Company>>()
     val companiesLiveData: LiveData<CompanySearchState<List<Company>>> = _companiesLiveData
-    private val _favoritesLiveData by favoriteState<Int>()
-    val favoritesLiveData: LiveData<FavoriteState<Int>> = _favoritesLiveData
+    val favoriteLiveEvent by favoriteState<Int>()
 
     fun getCompaniesByName(query: String) {
         _companiesLiveData.value = CompanySearchState.loading(true)
@@ -47,17 +46,17 @@ class CompanyListViewModel(
         }
     }
 
-    fun logout (){
+    fun logout() {
         repository.logout()
     }
 
-    fun favoriteDialogConfirm(company: Company, index: Int){
+    fun favoriteDialogConfirm(company: Company, index: Int) {
         if (!company.favorite) {
             saveCompanyIntoFavorites(company)
-            _favoritesLiveData.value = FavoriteState.successAdd(index)
+            favoriteLiveEvent.value = FavoriteState.successAdd(index)
         } else {
             removeCompanyFromFavorites(company)
-            _favoritesLiveData.value = FavoriteState.successRemoved(index)
+            favoriteLiveEvent.value = FavoriteState.successRemoved(index)
         }
     }
 

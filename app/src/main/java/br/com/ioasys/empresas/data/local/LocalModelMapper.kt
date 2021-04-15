@@ -11,7 +11,14 @@ fun Company.toLocalModel() =
         city = city,
         country = country,
         description = description,
-        favorite = true
+        favorite = true,
+        type = type.toLocalModel()
+    )
+
+fun CompanyType.toLocalModel() =
+    CompanyLocalType(
+        id = id,
+        name = typeName
     )
 
 fun CompanyLocal.fromLocalModel() =
@@ -24,5 +31,11 @@ fun CompanyLocal.fromLocalModel() =
         description = description,
         favorite = favorite,
         sharePrice = null,
-        type = CompanyType(0, "null")
+        type = type.fromLocalModel()
+    )
+
+fun CompanyLocalType.fromLocalModel() =
+    CompanyType(
+        id = id,
+        typeName = name
     )
