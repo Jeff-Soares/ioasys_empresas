@@ -37,8 +37,8 @@ If you want to change API endpoint, you need to configure `BASE_URL` in `build.g
 
 
 ## References
-* developer.android.com
+* [developer.android.com](developer.android.com)
 * [data binding library](developer.android.com/topic/libraries/data-binding)
 * [view model class](https://developer.android.com/topic/libraries/architecture/viewmodel)
 * [mvvm pattern](https://upday.github.io/blog/model-view-controller/)
-* insert-koin.io
+* [insert-koin.io](insert-koin.io)
